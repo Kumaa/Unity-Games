@@ -1,0 +1,39 @@
+void Shoot() {
+		//translate screen coordinates to world coordinates to allow for ray cast
+		if (facingDirectionScript.isFlipped == false) {
+			Vector2 mousePosition = new Vector2 (Camera.main.ScreenToWorldPoint (Input.mousePosition).x, Camera.main.ScreenToWorldPoint (Input.mousePosition).y);
+			Vector2 firePointPosition = new Vector2 (firePoint.position.x, firePoint.position.y);
+			RaycastHit2D hit = Physics2D.Raycast (firePointPosition, mousePosition - firePointPosition, 100, whatToHit);
+			//Debug.DrawLine (firePointPosition, (mousePosition - firePointPosition) * 100, Color.magenta);
+			if (hit.collider != null) {
+				//Debug.DrawLine (firePointPosition, hit.point, Color.red);
+				Enemy enemy = hit.collider.GetComponent<Enemy>();
+				if (enemy != null) {
+					enemy.DamageEnemy (Damage);
+				}
+			}
+			if (Time.time >= timeToSpawnEffect) {
+				Effect ();
+				timeToSpawnEffect = Time.time + 1/effectSpawnRate;
+			}
+		} else if (facingDirectionScript.isFlipped == true) {
+			Vector2 mousePosition = new Vector2 ((Camera.main.ScreenToWorldPoint (Input.mousePosition).x), Camera.main.ScreenToWorldPoint (Input.mousePosition).y) ;
+			Vector2 firePointPosition = new Vector2 ((firePoint.position.x), firePoint.position.y);
+			RaycastHit2D hit = Physics2D.Raycast (firePointPosition, (mousePosition - firePointPosition), 100, whatToHit);
+			//Debug.DrawLine (firePointPosition, (mousePosition - firePointPosition) * 100, Color.magenta);
+
+			if (hit.collider != null) {
+				//Debug.DrawLine (firePointPosition, hit.point, Color.red);
+				Enemy enemy = hit.collider.GetComponent<Enemy>();
+				if (enemy != null) {
+					enemy.DamageEnemy (Damage);
+				}
+			}
+			if (Time.time >= timeToSpawnEffect) {
+				Effect ();
+				timeToSpawnEffect = Time.time + 1/effectSpawnRate;
+			}
+		}
+	}
+	
+	//need to add possible line of code that damages enemies only when rayCast hits the enemy, not just at mouse position
